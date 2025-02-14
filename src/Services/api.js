@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5118/HealthHistory'; 
 const API_URL_USERCREDENTIAL = 'http://localhost:5118/UserCredential'; 
-const API_URL_HEALTHHISTORYCHANGE = 'http://localhost:5118/healthhistorychange';
+const API_URL_HEALTHHISTORYCHANGE = 'http://localhost:5118/healthHistoryChange';
 
 
 export const getHealthHistories = async () => {
@@ -79,9 +79,21 @@ export const validateUserCredential = async (newUser) => {
 export const getHealthHistoryChanges = async () => {
     try {
         const response = await axios.get(API_URL_HEALTHHISTORYCHANGE);
+        
         return response.data;
     } catch (error) {
         console.error('Error fetching health history changes:', error);
         throw error;
     }
 };
+
+export const getHealthHistoryChangeById = async (id) => {
+    try {
+        const response = await axios.get(`${API_URL_HEALTHHISTORYCHANGE}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching health history Changes by ID:', error);
+        throw error;
+    }
+};
+

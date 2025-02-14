@@ -4,6 +4,7 @@ import PatientGrid from '../Components/PatientGrid';
 import AddHealthHistory from '../Components/AddHealthHistory';
 import UpdateHealthHistory from '../Components/UpdateHealthHistoy';
 import ViewHealthHistory from '../Components/ViewHealthHistory';
+import ViewHistoryChange from '../Components/ViewHistoryChange';
 import Register from '../Components/Register';
 import Login from '../Components/Login';
 import HealthHistoryChange from '../Components/HealthHistoryChange';
@@ -42,6 +43,12 @@ const AppRouter = () => {
                         isAuthenticated ? <HealthHistoryChange /> : <Navigate to="/" />
                     }
                 />
+              <Route
+                    path="/viewHistory/:id"
+                    element={
+                        isAuthenticated ? <ViewHistoryChange /> : <Navigate to="/" />
+                    }
+              />  
               <Route
                     path="/view/:id"
                     element={

@@ -14,6 +14,7 @@ const HealthHistoryChange = () => {
         const fetchData = async () => {
             try {
                 const data = await getHealthHistoryChanges();
+                    
                 setHealthHistoryChanges(data);
             } catch (error) {
                 console.error('Error fetching health history changes:', error);
@@ -28,15 +29,25 @@ const HealthHistoryChange = () => {
         setCurrentPage(1); // Reset to first page on search
     };
 
-    const filteredRecords = healthHistoryChanges.filter((history) =>
-        history.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        history.nro_documento.toString().includes(searchTerm)
-    );
+    const filteredRecords = healthHistoryChanges.filter((history) => {
+        const searchTermLower = searchTerm.toLowerCase();
+
+        console.log("searchTermLower" + searchTermLower);
+
+        return (
+            history.id.toString().includes(searchTermLower) ||
+            history.healthHistoryId.toString().includes(searchTermLower) ||
+            history.changeDate.toLowerCase().includes(searchTermLower)
+        );
+    });
 
     const indexOfLastRecord = currentPage * recordsPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = filteredRecords.slice(indexOfFirstRecord, indexOfLastRecord);
     const totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+    console.log('Search term:', searchTerm);
+    console.log('Filtered records:', filteredRecords);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) {
@@ -51,22 +62,34 @@ const HealthHistoryChange = () => {
     };
 
     const handleView = (id) => {
-        navigate(`/view/${id}`);
+        navigate(`/viewHistory/${id}`);
     };
 
+    const handlePatientGrid = (id) => {
+        navigate(`/patients/`);
+    };
+
+    
 
     return (
 <div className="container mx-auto p-4">
             
-            <h1 className="text-2xl font-bold mb-4">Cambios en la Historia Clínica</h1>
+            <h1 className="text-2xl font-bold mb-4">Cambios Históricos</h1>
             <div className="flex items-center mb-4">
                 <input
                     type="text"
-                    placeholder="Buscar por DNI o Título"
+                    placeholder="Buscar por ID, HealthHistoryId o Fecha"
                     value={searchTerm}
                     onChange={handleSearchChange}
                     className="flex-grow p-2 border border-gray-300 rounded mr-2"
                 />
+                <button
+                    type="button"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    onClick={handlePatientGrid}
+                >
+                    Volver a Historias Clinicas
+                </button>
             </div>
 
 
@@ -76,15 +99,22 @@ const HealthHistoryChange = () => {
                 <div class="col col-1">ID</div>
                 <div class="col col-2">HealthHistoryId</div>
                 <div class="col col-3">Fecha</div>
+                <div class="col col-3">Acciones</div>
                 
                 </li>
-                {healthHistoryChanges.map((change) => (
+                {currentRecords.map((change) => (
                     <li class="table-row" key={change.id}>
                     <div class="col col-1" data-label="Id">{change.id}</div>
-                    <div class="col col-2" data-label="HealthHistoryId">{change.HealthHistoryId}</div>
-                    <div class="col col-3" data-label="Fecha">{change.fecha}</div>
-                    <div class="col col-4" data-label="Acciones">                    
-                        <button className="text-green-500 hover:text-green-700 ml-2" onClick={() => handleView(change.id)}>Ver</button>                        
+                    <div class="col col-2" data-label="HealthHistoryId">{change.healthHistoryId}</div>
+                    <div class="col col-3" data-label="Fecha">{change.changeDate}</div>
+                    <div class="col col-4" data-label="Acciones">                        
+                        <button
+                            type="button"
+                            className="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                            onClick={() => handleView(change.id)}
+                        >
+                            Ver
+                        </button>
                     </div> 
                     </li>
             ))}
@@ -92,15 +122,25 @@ const HealthHistoryChange = () => {
             </div>
 
             <div className="pagination">
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    Previous
-                </button>
+            
+            <button 
+                onClick={handlePreviousPage} disabled={currentPage === 1}
+                className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+                Previous
+            </button>
+            <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
                 <span>Page {currentPage} of {totalPages}</span>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Next
-                </button>
-            </div>
-        </div>
+            </p>
+            <button 
+                onClick={handleNextPage} disabled={currentPage === totalPages}
+                className="select-none rounded-lg border border-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-gray-900 transition-all hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            >
+                Next
+            </button>
+        
+        </div> 
+    </div>
 
 
 
