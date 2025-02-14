@@ -26,9 +26,8 @@ export const getHealthHistoryById = async (id) => {
 };
 
 export const addHealthHistory = async (newHistory) => {
-    try {
-        console.error(newHistory);
-        const response = await axios.post(API_URL, newHistory);
+    try {        
+        const response = await axios.post(API_URL, newHistory);        
         return response.data;
     } catch (error) {
         console.error('Error adding health history:', error);
