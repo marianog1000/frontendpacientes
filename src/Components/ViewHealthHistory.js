@@ -51,13 +51,11 @@ const ViewHealthHistory = () => {
 
                                 <button 
                                 type="button"
-                                className={`rounded-md py-2 px-4 border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${healthHistory.tipo_consulta  === 'Urgencia' ? 'bg-red-500 text-white' : 'bg-white-500 text-black'}`}
-                                
+                                className={`rounded-md py-2 px-4 border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${healthHistory.tipo_consulta  === 'Urgencia' ? 'bg-red-500 text-white' : 'bg-white-500 text-black'}`}                                
                                 >Urgencia</button> 
                                 <button        
                                 type="button"           
-                                className={`rounded-md py-2 px-4 border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${healthHistory.tipo_consulta  === 'Programada' ? 'bg-blue-500 text-white' : 'bg-white-500 text-black'}`}
-                                
+                                className={`rounded-md py-2 px-4 border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ml-2 ${healthHistory.tipo_consulta  === 'Programada' ? 'bg-blue-500 text-white' : 'bg-white-500 text-black'}`}                                
                                 >Programada</button> 
                             </div>
                         </div>

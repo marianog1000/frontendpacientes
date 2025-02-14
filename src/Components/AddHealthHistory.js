@@ -19,7 +19,7 @@ const AddHealthHistory = () => {
         aspecto_psiquico: '',
         atencion: '',
         conciencia: '',
-        contenido_del_Pensamiento: '',
+        contenido_del_pensamiento: '',
         control_esfinteres: '',
         curso_del_pensamiento: '',
         diagnostico_cie10_dsm_iv: '',
@@ -177,8 +177,8 @@ const AddHealthHistory = () => {
 
             <Tabs defaultActiveKey="datos_personales" id="health-history-tabs" className="mb-3">
               <Tab eventKey="datos_personales" title="Datos Personales">
-                  <div className="flex flex-wrap">
 
+                  <div className="flex flex-wrap">
 
                     <div className="w-full md:w-1/2 p-2">
                       <div className="mb-5">
