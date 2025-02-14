@@ -63,13 +63,13 @@ const AddHealthHistory = () => {
 
           let propertyToUpdate = null;
 
-          if (enfermedades_concurrentes.includes(name)) {
+          if (enfermedades_concurrentes.some((item) => Object.keys(item)[0] === name)) {
             propertyToUpdate = "enfermedades_concurrentes";
-          } else if (sensopersepcion.includes(name)) {
+          } else if (sensopersepcion.some((item) => Object.keys(item)[0] === name)) {
             propertyToUpdate = "sensopersepcion";
-          } else if (afectividad.includes(name)) {
+          } else if (afectividad.some((item) => Object.keys(item)[0] === name)) {
             propertyToUpdate = "afectividad";
-          } else if (sueno.includes(name)) {
+          } else if (sueno.some((item) => Object.keys(item)[0] === name)) {
             propertyToUpdate = "sueno";
           }
 
@@ -85,7 +85,7 @@ const AddHealthHistory = () => {
                 updatedArray.push(name);
               }
             } else {
-              updatedArray = updatedArray.filter((item) => item !== name);
+              updatedArray = updatedArray.filter((item) => item.trim() !== name.trim());
             }
             console.log(`After Update: ${propertyToUpdate} ->`, updatedArray);          
           
@@ -436,28 +436,33 @@ const AddHealthHistory = () => {
 
 
                     <div className="flex flex-wrap">                    
-                        {enfermedades_concurrentes.map((enfermedad) => (
-                          <div key={enfermedad} className="flex items-center mr-4 mb-2">
+                        {enfermedades_concurrentes.map((item) => {
+                          const key = Object.keys(item)[0];
+                          const label = item[key];
+
+                          return (
+                          <div key={key} className="flex items-center mr-4 mb-2">
                             <input
-                              id={`${enfermedad.toLowerCase()}_checkbox`}
+                              id={`${key}_checkbox`}
                               type="checkbox"
-                              name={enfermedad}                              
+                              name={key}                              
                               checked={newHistory.enfermedades_concurrentes
-                                ? newHistory.enfermedades_concurrentes.split(",").includes(enfermedad)
+                                ? newHistory.enfermedades_concurrentes.split(",").includes(key)
                                 : false
                               }
                               onChange={handleChange}
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                             />                            
                             <label
-                              htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                              htmlFor={`${key}_checkbox`}
                               className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
-                              {enfermedad}
+                              {label}
                             </label>
                           </div>
-                        ))}
-                      </div>
+                          );
+                        })}
+                    </div>
                 </div>
 
                 <div className="mb-5">
@@ -771,28 +776,33 @@ const AddHealthHistory = () => {
                   >Sensopersepción</label>
 
                   <div className="flex flex-wrap">                    
-                      {sensopersepcion.map((enfermedad) => (
-                        <div key={enfermedad} className="flex items-center mr-4 mb-2">
+                      {sensopersepcion.map((item) => {
+                        const key = Object.keys(item)[0];
+                        const label = item[key];
+
+                        return (
+                        <div key={key} className="flex items-center mr-4 mb-2">
                           <input
-                            id={`${enfermedad.toLowerCase()}_checkbox`}
+                            id={`${key}_checkbox`}
                             type="checkbox"
-                            name={enfermedad}
+                            name={key}                              
                             checked={newHistory.sensopersepcion
-                              ? newHistory.sensopersepcion.split(",").includes(enfermedad)
+                              ? newHistory.sensopersepcion.split(",").includes(key)
                               : false
                             }
                             onChange={handleChange}
                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                           />                            
                           <label
-                            htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                            htmlFor={`${key}_checkbox`}
                             className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                           >
-                            {enfermedad}
+                            {label}
                           </label>
                         </div>
-                      ))}
-                    </div>
+                        );
+                      })}
+                  </div>
               </div>
 
               <div className="mb-5">
@@ -801,30 +811,35 @@ const AddHealthHistory = () => {
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >Afectividad</label>
 
-                    <div className="flex flex-wrap">
-                      {afectividad.map((enfermedad) => (
-                        <div key={enfermedad} className="flex items-center mr-4 mb-2">
-                          <input
-                            id={`${enfermedad.toLowerCase()}_checkbox`}
-                            type="checkbox"
-                            name={enfermedad}                              
-                            checked={newHistory.afectividad
-                              ? newHistory.afectividad.split(",").includes(enfermedad)
-                              : false
-                            }
-                            onChange={handleChange}
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                          />                            
-                          <label
-                            htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
-                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                          >
-                            {enfermedad}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-              </div>
+                      <div className="flex flex-wrap">                    
+                        {afectividad.map((item) => {
+                          const key = Object.keys(item)[0];
+                          const label = item[key];
+
+                          return (
+                          <div key={key} className="flex items-center mr-4 mb-2">
+                            <input
+                              id={`${key}_checkbox`}
+                              type="checkbox"
+                              name={key}                              
+                              checked={newHistory.afectividad
+                                ? newHistory.afectividad.split(",").includes(key)
+                                : false
+                              }
+                              onChange={handleChange}
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            />                            
+                            <label
+                              htmlFor={`${key}_checkbox`}
+                              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >
+                              {label}
+                            </label>
+                          </div>
+                          );
+                        })}
+                      </div>
+                </div>
 
               <div className="flex flex-wrap">
                 <div className="w-full md:w-1/2 p-2">
@@ -939,29 +954,34 @@ const AddHealthHistory = () => {
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Sueño</label>
 
-                  <div className="flex flex-wrap">
-                    {sueno.map((enfermedad) => (
-                      <div key={enfermedad} className="flex items-center mr-4 mb-2">
-                        <input
-                          id={`${enfermedad.toLowerCase()}_checkbox`}
-                          type="checkbox"
-                          name={enfermedad}                              
-                          checked={newHistory.sueno
-                            ? newHistory.sueno.split(",").includes(enfermedad)
-                            : false
-                          }
-                          onChange={handleChange}
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />                            
-                        <label
-                          htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
-                          className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                          {enfermedad}
-                        </label>
+                      <div className="flex flex-wrap">                    
+                        {sueno.map((item) => {
+                          const key = Object.keys(item)[0];
+                          const label = item[key];
+
+                          return (
+                          <div key={key} className="flex items-center mr-4 mb-2">
+                            <input
+                              id={`${key}_checkbox`}
+                              type="checkbox"
+                              name={key}                              
+                              checked={newHistory.sueno
+                                ? newHistory.sueno.split(",").includes(key)
+                                : false
+                              }
+                              onChange={handleChange}
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            />                            
+                            <label
+                              htmlFor={`${key}_checkbox`}
+                              className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                            >
+                              {label}
+                            </label>
+                          </div>
+                          );
+                        })}
                       </div>
-                    ))}
-                  </div>
               </div>
 
 
