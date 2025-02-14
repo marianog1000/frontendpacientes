@@ -58,20 +58,41 @@ const AddHealthHistory = () => {
     const handleChange = (e) => {
       const { name, value, type, checked } = e.target;
       if (type === "checkbox") {
-        
+
         setNewHistory((prev) => {
-           let updatedEnfermedades = prev.enfermedades_concurrentes
-             ? prev.enfermedades_concurrentes.split(",") // Convert string to array
-             : [];
 
-          if (checked) {
-            updatedEnfermedades.push(name);
-          } else {
-            updatedEnfermedades = updatedEnfermedades.filter((item) => item !== name);
+          let propertyToUpdate = null;
+
+          if (enfermedades_concurrentes.includes(name)) {
+            propertyToUpdate = "enfermedades_concurrentes";
+          } else if (sensopersepcion.includes(name)) {
+            propertyToUpdate = "sensopersepcion";
+          } else if (afectividad.includes(name)) {
+            propertyToUpdate = "afectividad";
+          } else if (sueno.includes(name)) {
+            propertyToUpdate = "sueno";
           }
-    
-         return { ...prev, enfermedades_concurrentes: updatedEnfermedades.join(",") };
 
+          if (!propertyToUpdate) return prev;
+
+           let currentValue = prev[propertyToUpdate] || ""; 
+           let updatedArray = currentValue ? currentValue.split(",") : [];
+
+           console.log(`Before Update: ${propertyToUpdate} ->`, updatedArray);
+
+            if (checked) {
+              if (!updatedArray.some((item) => item === name)) {
+                updatedArray.push(name);
+              }
+            } else {
+              updatedArray = updatedArray.filter((item) => item !== name);
+            }
+            console.log(`After Update: ${propertyToUpdate} ->`, updatedArray);          
+          
+          return {
+            ...prev,
+            [propertyToUpdate]: updatedArray.length > 0 ? updatedArray.join(",") : "",
+          };
           
         });
       } else {
@@ -250,7 +271,7 @@ const AddHealthHistory = () => {
                           <select 
                             id="estado_civil" 
                             name="estado_civil"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             value={newHistory.estado_civil || ""}
                             onChange={handleChange}
                           >
@@ -414,29 +435,29 @@ const AddHealthHistory = () => {
                     >Enfermedades Concurrentes</label>
 
 
-                    <div className="flex flex-wrap">
-                    {console.log("enfermedades concurrentes " + newHistory.enfermedades_concurrentes) }
+                    <div className="flex flex-wrap">                    
                         {enfermedades_concurrentes.map((enfermedad) => (
                           <div key={enfermedad} className="flex items-center mr-4 mb-2">
                             <input
                               id={`${enfermedad.toLowerCase()}_checkbox`}
                               type="checkbox"
-                              name={enfermedad}
-                              checked={newHistory.enfermedades_concurrentes.includes(enfermedad)}
+                              name={enfermedad}                              
+                              checked={newHistory.enfermedades_concurrentes
+                                ? newHistory.enfermedades_concurrentes.split(",").includes(enfermedad)
+                                : false
+                              }
                               onChange={handleChange}
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            
+                            />                            
                             <label
-                              htmlhtmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                              htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
                               className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                             >
                               {enfermedad}
                             </label>
                           </div>
                         ))}
-                      </div>                    
-
+                      </div>
                 </div>
 
                 <div className="mb-5">
@@ -486,7 +507,7 @@ const AddHealthHistory = () => {
                     <select 
                       id="aspecto_psiquico" 
                       name="aspecto_psiquico" 
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       value={newHistory.aspecto_psiquico} 
                       onChange={handleChange}
                     >
@@ -510,7 +531,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="actitud_psiquica" 
                         name="actitud_psiquica" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.actitud_psiquica} 
                         onChange={handleChange}
                       >
@@ -538,7 +559,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="actividad" 
                         name="actividad" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.actividad} 
                         onChange={handleChange}
                       >
@@ -563,7 +584,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="orientacion" 
                         name="orientacion" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.orientacion} 
                         onChange={handleChange}
                       >
@@ -587,11 +608,10 @@ const AddHealthHistory = () => {
                         className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                       >Conciencia</label>
 
-
                       <select 
                         id="conciencia" 
                         name="conciencia" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.conciencia} 
                         onChange={handleChange}
                       >
@@ -618,7 +638,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="memoria" 
                         name="memoria" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.memoria} 
                         onChange={handleChange}
                       >
@@ -649,7 +669,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="atencion" 
                         name="atencion" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.atencion} 
                         onChange={handleChange}
                       >
@@ -673,7 +693,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="ideacion" 
                         name="ideacion" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.ideacion} 
                         onChange={handleChange}
                       >
@@ -705,7 +725,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="curso_del_pensamiento" 
                         name="curso_del_pensamiento" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.curso_del_pensamiento} 
                         onChange={handleChange}
                       >
@@ -728,7 +748,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="contenido_del_pensamiento" 
                         name="contenido_del_pensamiento" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.contenido_del_pensamiento} 
                         onChange={handleChange}
                       >
@@ -744,282 +764,67 @@ const AddHealthHistory = () => {
                 </div>
               </div>
 
-              
               <div className="mb-5">
-                <label 
-                  htmlFor="base-input" 
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Sensopersepción</label>
+                  <label 
+                    htmlFor="base-input" 
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Sensopersepción</label>
 
-                <div className='flex flex-wrap'>
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="sin_alteracion_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="sin_alteracion_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sin Alteración
-                      </label>
+                  <div className="flex flex-wrap">                    
+                      {sensopersepcion.map((enfermedad) => (
+                        <div key={enfermedad} className="flex items-center mr-4 mb-2">
+                          <input
+                            id={`${enfermedad.toLowerCase()}_checkbox`}
+                            type="checkbox"
+                            name={enfermedad}
+                            checked={newHistory.sensopersepcion
+                              ? newHistory.sensopersepcion.split(",").includes(enfermedad)
+                              : false
+                            }
+                            onChange={handleChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          />                            
+                          <label
+                            htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            {enfermedad}
+                          </label>
+                        </div>
+                      ))}
                     </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="ilusiones_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="ilusiones_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ilusiones
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_visuales_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_visuales_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Visuales
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_auditivas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_auditivas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Auditivas
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_cenestesicas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_cenestesicas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Cenestésicas
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_terrorificas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_terrorificas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Terrorificas
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_placenteras_de_influencia_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_placenteras_de_influencia_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Placenteras de Influencia
-                      </label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_diurnas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_diurnas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Diurnas</label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_nocturnas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_nocturnas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Nocturnas</label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_aisladas_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_aisladas_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Aisladas</label>
-                    </div>
-
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_permanentes_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_permanentes_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones Permanentes</label>
-                    </div>
-                    <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="alucinaciones_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="alucinaciones_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alucinaciones </label>
-                    </div>
-                </div>
-
               </div>
 
-
               <div className="mb-5">
-                <label 
-                  htmlFor="base-input" 
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Afectividad</label>
+                  <label 
+                    htmlFor="base-input" 
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >Afectividad</label>
 
-                <div className='flex flex-wrap'>
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="sin_alteracion_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="sin_alteracion_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sin Alteración
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hipertimia_placentera_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hipertimia_placentera_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hipertimia Placentera
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hipomania_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hipomania_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hipomanía
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="mania_franca_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="mania_franca_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Manía Franca
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hipertimia_displacentera_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hipertimia_displacentera_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hipertimia Displacentera
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="ansiedad_persecutoria_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="ansiedad_persecutoria_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ansiedad Persecutoria
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="paratimia_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="paratimia_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Paratimia
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="indiferencia_afectiva_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="indiferencia_afectiva_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Indiferencia Afectiva
-                      </label>
-                  </div>
-                </div>
+                    <div className="flex flex-wrap">
+                      {afectividad.map((enfermedad) => (
+                        <div key={enfermedad} className="flex items-center mr-4 mb-2">
+                          <input
+                            id={`${enfermedad.toLowerCase()}_checkbox`}
+                            type="checkbox"
+                            name={enfermedad}                              
+                            checked={newHistory.afectividad
+                              ? newHistory.afectividad.split(",").includes(enfermedad)
+                              : false
+                            }
+                            onChange={handleChange}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                          />                            
+                          <label
+                            htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                          >
+                            {enfermedad}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
               </div>
-              
-
 
               <div className="flex flex-wrap">
                 <div className="w-full md:w-1/2 p-2">
@@ -1032,7 +837,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="inteligencia" 
                         name="inteligencia" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.inteligencia} 
                         onChange={handleChange}
                       >
@@ -1054,7 +859,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="juicio" 
                         name="juicio" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.juicio} 
                         onChange={handleChange}
                       >
@@ -1083,7 +888,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="control_esfinteres" 
                         name="control_esfinteres" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.control_esfinteres} 
                         onChange={handleChange}
                       >
@@ -1106,7 +911,7 @@ const AddHealthHistory = () => {
                       <select 
                         id="lenguaje" 
                         name="lenguaje" 
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         value={newHistory.lenguaje} 
                         onChange={handleChange}
                       >
@@ -1134,145 +939,30 @@ const AddHealthHistory = () => {
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Sueño</label>
 
-                <div className='flex flex-wrap'>
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="normal_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="normal" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Normal
-                      </label>
+                  <div className="flex flex-wrap">
+                    {sueno.map((enfermedad) => (
+                      <div key={enfermedad} className="flex items-center mr-4 mb-2">
+                        <input
+                          id={`${enfermedad.toLowerCase()}_checkbox`}
+                          type="checkbox"
+                          name={enfermedad}                              
+                          checked={newHistory.sueno
+                            ? newHistory.sueno.split(",").includes(enfermedad)
+                            : false
+                          }
+                          onChange={handleChange}
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />                            
+                        <label
+                          htmlFor={`${enfermedad.toLowerCase()}_checkbox`}
+                          className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          {enfermedad}
+                        </label>
+                      </div>
+                    ))}
                   </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hipersomnia_diurnia_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hipersomnia_diurnia_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hipersomnia Diurnia
-                      </label>
-                  </div>
-
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="clinofilia_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="clinofilia_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Clinofilia
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hiposomnia_predormicional_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hiposomnia_predormicional_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hiposomnia Predormicional
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hiposomnia_lacunaria_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hiposomnia_lacunaria_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hiposomnia Lacunaria
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="hiposomnia_postdormicional_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="hiposomnia_postdormicional_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Hiposomnia Postdormicional
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="sonambulismo_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="sonambulismo_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sonambulismo
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="enuresis_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="enuresis_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Enuresis
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="pavor_nocturnus_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="pavor_nocturnus_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pavor Nocturnus
-                      </label>
-                  </div>
-
-                  <div className="flex items-center mr-4 mb-2">
-                      <input 
-                        id="deambulacion_nocturna_checkbox" 
-                        type="checkbox" 
-                        value="" 
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      </input>
-                      <label 
-                        htmlFor="deambulacion_nocturna_checkbox" 
-                        className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Deambulación Nocturna
-                      </label>
-                  </div>
-
-                </div>
               </div>
-
-
-
-
-
 
 
             </Tab>
