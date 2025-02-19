@@ -122,6 +122,23 @@ const ViewHealthHistory = () => {
                                 />
                             </div>
                         </div>
+
+                        <div className="w-full md:w-1/2 p-2">
+
+                            <div className="mb-5">
+                                <label 
+                                    for="base-input" 
+                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                >Afiliado Nro.</label>
+                                <input 
+                                    type="text" 
+                                    name="afiliado_nro" 
+                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                    value={healthHistory.afiliado_nro}  />                            
+                            </div>
+                        </div>
+
+
                         <div className="w-full md:w-1/2 p-2">
                             <div className="mb-5">
                                 <label 
@@ -138,20 +155,7 @@ const ViewHealthHistory = () => {
                         </div>
 
 
-                        <div className="w-full md:w-1/2 p-2">
 
-                            <div className="mb-5">
-                                <label 
-                                    for="base-input" 
-                                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                >Afiliado Nro.</label>
-                                <input 
-                                    type="text" 
-                                    name="afiliado_nro" 
-                                    className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                    value={healthHistory.afiliado_nro}  />                            
-                            </div>
-                        </div>
                         <div className="w-full md:w-1/2 p-2">   
                             <div className="mb-5">
                                 <label 
@@ -317,14 +321,15 @@ const ViewHealthHistory = () => {
                             <label 
                                 for="base-input" 
                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                            >Enfermedad Actual</label>
-                            
-                            <input  
-                                type="text" 
+                            >Enfermedad Actual</label>                           
+                            <textarea 
                                 name="enfermedad_actual" 
+                                cols="40" 
+                                rows="5" 
+                                value={healthHistory.enfermedad_actual}                                 
                                 className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                value={healthHistory.enfermedad_actual}
-                            />
+                            >
+                            </textarea>
                         </div>
 
 

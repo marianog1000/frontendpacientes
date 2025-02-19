@@ -29,61 +29,6 @@ const Login = ({ setIsAuthenticated }) => {
     };
 
     return (
-    // <div class="contain py-16">
-    //     <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
-    //         <h2 class="text-2xl uppercase font-medium mb-1">Login</h2>
-    //         <form onSubmit={handleLogin}>
-    //             <div className="space-y-2">
-    //                 <label className="text-gray-600 mb-2 block" htmlFor="username">
-    //                     Usuario
-    //                 </label>
-    //                 <input
-    //                     type="text"
-    //                     id="username"
-    //                     value={username}
-    //                     onChange={(e) => setUsername(e.target.value)}
-    //                     className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-teal-500 placeholder-gray-400"
-    //                     required
-    //                 />
-    //             </div>
-    //             <div className="space-y-2 mt-4">
-    //                 <label className="text-gray-600 mb-2 block" htmlFor="password">
-    //                     Password
-    //                 </label>
-    //                 <div>
-    //                     <input
-    //                         type="password"
-    //                         id="password"
-    //                         value={password}
-    //                         onChange={(e) => setPassword(e.target.value)}
-    //                         className="block w-full border border-gray-300 px-4 py-3 text-gray-600 text-sm rounded focus:ring-0 focus:border-teal-500 placeholder-gray-400"
-    //                         placeholder="***********"
-    //                         required
-    //                     />
-
-    //                 </div>
-    //             </div>
-    //             <div className="space-y-2 mt-4">
-    //                 <button
-    //                     type="submit"
-    //                     className="block w-full py-2 text-center text-white bg-blue-500 border border-blue-500 rounded hover:bg-transparent hover:text-blue-500 transition uppercase font-roboto font-medium"
-    //                 >
-    //                     Iniciar Sesión
-    //                 </button>
-    //             </div>
-    //         </form>
-    //         <div classname="space-y-2 mt-4">
-    //             <button
-    //                 type="button"
-    //                 className="block w-full py-2 text-center text-white bg-teal-500 border border-teal-500 rounded hover:bg-transparent hover:text-teal-500 transition uppercase font-roboto font-medium"
-    //                 onClick={handleRegister}
-    //             >
-    //                 Registrar Usuario
-    //             </button>
-    //         </div>
-    //     </div>
-    // </div>
-
         <div class="contain py-16">
         <div class="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
             <h2 class="text-2xl uppercase font-medium mb-1">Login</h2>
